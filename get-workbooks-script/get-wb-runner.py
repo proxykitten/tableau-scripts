@@ -66,6 +66,11 @@ def save_workbooks_to_csv(all_workbooks, filename, debug=False):
                 wb.get('project', {}).get('name')
             ])
 
+        # Add the "Fetched on" line after all workbook rows
+        writer.writerow([])
+        writer.writerow([f"Fetched on {datetime.now().strftime('%Y-%m-%d')}"])
+
+
 def main():
     parser = argparse.ArgumentParser(description="Fetch Tableau workbooks and export to a single CSV")
     parser.add_argument('--tableau-url', required=True, help='Base Tableau REST API URL (e.g., https://server/api/3.18)')
