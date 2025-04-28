@@ -1,6 +1,6 @@
 ## GET ALL WORKBOOKS IN TABLEAU SERVER
 
-This script is to get all and list all workbooks inside the Tableau Server. The script itself fetches these data:
+This script retrieves all workbooks inside the Tableau Server. The script itself fetches these data:
 - Site Name
 - Workbook ID
 - Workbook Name
@@ -20,7 +20,7 @@ This script is to get all and list all workbooks inside the Tableau Server. The 
 
 2. Simply just run these commands
 
-    `python3 get-wb-runner.py --tableau-url <your-tableau-server-url> --output <output-name> --username <tableau-server-username>`
+    `python3 get-wb-runner.py --tableau-url <your-tableau-server-url> --output <output-name> --username <tableau-server-username> [--api-version <api-version>] [--debug]`
     
     Example:
 
@@ -28,7 +28,7 @@ This script is to get all and list all workbooks inside the Tableau Server. The 
 
 ## LIMITATION
 
-1. For now, the limitation is it can only fetch the workbook with maximum number 1000 per site.
+1. For now, the limitation is it can only fetch maximum 1000 workbooks per site.
 
 ## ENVIRONMENT
 
