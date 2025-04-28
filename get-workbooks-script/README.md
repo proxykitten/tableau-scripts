@@ -16,17 +16,23 @@ This script retrieves all workbooks inside the Tableau Server. The script itself
 
 1. Install the required libraries
 
-    `pip install -r requirements.csv`
+    ```bash
+    pip install -r requirements.csv
+    ```
 
 2. Simply just run these commands
 
-    `python3 get-wb-runner.py --tableau-url <your-tableau-server-url> --output <output-name> --username <tableau-server-username> [--api-version <api-version>] [--debug]`
+    ```bash
+    python3 get-wb-runner.py --tableau-url <your-tableau-server-url> --output <output-name> --username <tableau-server-username> [--api-version <api-version>] [--debug]
+    ```
     
     Example:
 
-    `python3 get-wb-runner.py --tableau-url https://myserver.com --output workbook-list.csv --username admin`
+    ```bash
+    python3 get-wb-runner.py --tableau-url https://myserver.com --output workbook-list.csv --username admin
+    ```
 
-## LIMITATION
+## LIMITATION / KNOWN ISSUES
 
 1. For now, the limitation is it can only fetch maximum 1000 workbooks per site.
 
