@@ -24,7 +24,7 @@ This script is to get all and list all workbooks inside the Tableau Server. The 
     
     Example:
 
-    `python3 get-wb-runner.py --tableau-url my.tableauserver.com --output workbook-list.csv --username admin`
+    `python3 get-wb-runner.py --tableau-url https://myserver.com --output workbook-list.csv --username admin`
 
 ## LIMITATION
 
