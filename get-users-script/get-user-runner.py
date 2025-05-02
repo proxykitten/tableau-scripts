@@ -6,6 +6,7 @@ import os
 import csv
 import re
 import getpass
+from datetime import datetime
 
 # Setup basic logging
 logging.basicConfig(
@@ -164,14 +165,20 @@ def save_to_csv(data, output_file):
                     seen_usernames[username]['Site Role'] = new_role
                     seen_usernames[username]['License Level'] = determine_license_level(new_role)
 
-        # Write the final data to CSV
+        # Add the user data to unique_data
         for user in seen_usernames.values():
             unique_data.append(user)
 
+        # Write the final data to CSV
         with open(output_file, mode='w', newline='', encoding='utf-8') as f:
-            writer = csv.DictWriter(f, fieldnames=unique_data[0].keys())
+            fieldnames = unique_data[0].keys()
+            writer = csv.DictWriter(f, fieldnames=fieldnames)
             writer.writeheader()
             writer.writerows(unique_data)
+
+            # Add the "Fetched On" line at the end
+            fetched_on = datetime.utcnow().strftime('Fetched on %Y-%m-%d %H:%M:%S UTC')
+            f.write(f"\n{fetched_on}\n")
 
         logger.info(f"Data successfully saved to '{output_file}'")
     except Exception as e:
