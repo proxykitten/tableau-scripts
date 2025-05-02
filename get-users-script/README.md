@@ -4,6 +4,7 @@ This script retrieves all users in the Tableau Server. It fetches the following 
 - Display Name
 - Username
 - Site Role
+- License Level
 - Last Login (UTC)
 - User ID
 
@@ -30,6 +31,7 @@ This script retrieves all users in the Tableau Server. It fetches the following 
 ## LIMITATION / KNOWN ISSUES
 
 1. The user's site role is fetches from the first site found. Be sure to double check if some users are a member or multiple sites.
+2. The user's license is depend on the user's role. If user is a member of multiple site, the license may be wrong.
 
 ## ENVIRONMENT
 

@@ -89,15 +89,27 @@ def extract_content_urls(sites_response):
         logger.error(f"Content URL extraction failed: {e}")
         exit(1)
 
+def determine_license_level(site_role):
+    if site_role in ['Server Administrator', 'Site Administrator Creator', 'Creator']:
+        return 'Creator'
+    elif site_role in ['Site Administrator Explorer', 'Explorer (Can Publish)', 'Explorer']:
+        return 'Explorer'
+    elif site_role == 'Viewer':
+        return 'Viewer'
+    else:
+        return 'Unlicensed'
+
 def extract_users(users_response):
     users_list = []
     try:
         user_elements = users_response.findall('ns:users/ns:user', namespaces=NAMESPACE)
         for user in user_elements:
+            cleaned_site_role = clean_site_role(user.get('siteRole'))
             user_data = {
                 'Display Name': user.get('fullName'),
                 'Username': user.get('name'),
-                'Site Role': clean_site_role(user.get('siteRole')),
+                'Site Role': cleaned_site_role,
+                'License Level': determine_license_level(cleaned_site_role),
                 'Last Login (UTC)': user.get('lastLogin'),
                 'User ID': user.get('id')
             }
