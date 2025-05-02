@@ -30,9 +30,6 @@ This script retrieves all users in the Tableau Server. It fetches the following 
 
 ## LIMITATION / KNOWN ISSUES
 
-1. The user's site role is fetches from the first site found. Be sure to double check if some users are a member or multiple sites.
-2. The user's license is depend on the user's role. If user is a member of multiple site, the license may be wrong.
-
 ## ENVIRONMENT
 
 Tested on Python 3.6.8. The script should work with Python 3.6 and above.

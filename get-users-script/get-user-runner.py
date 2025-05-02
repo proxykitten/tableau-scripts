@@ -21,6 +21,22 @@ BASE_URL = None
 USERNAME = None
 PASSWORD = None
 
+# Role hierarchy
+ROLE_PRIORITY = {
+    "Server Administrator": 10,
+    "Site Administrator Creator": 9,
+    "Creator": 8,
+    "Site Administrator Explorer": 7,
+    "Explorer (Can Publish)": 6,
+    "Explorer": 5,
+    "Viewer": 4,
+    "Unlicensed": 0
+}
+
+def get_role_priority(role):
+    """Returns the priority of the given role."""
+    return ROLE_PRIORITY.get(role, -1)  # Default to -1 if role is unknown
+
 def authenticate(site_id=''):
     logger.debug(f"Authenticating (site_id='{site_id}')")
     headers = {'Content-Type': 'application/xml'}
@@ -90,6 +106,7 @@ def extract_content_urls(sites_response):
         exit(1)
 
 def determine_license_level(site_role):
+    """Returns the license level for the given site role."""
     if site_role in ['Server Administrator', 'Site Administrator Creator', 'Creator']:
         return 'Creator'
     elif site_role in ['Site Administrator Explorer', 'Explorer (Can Publish)', 'Explorer']:
@@ -98,6 +115,13 @@ def determine_license_level(site_role):
         return 'Viewer'
     else:
         return 'Unlicensed'
+
+def clean_site_role(site_role):
+    """Cleans and formats the site role."""
+    if not site_role:
+        return ''
+    site_role = site_role.replace('CanPublish', ' (Can Publish)')
+    return re.sub(r'(?<!\s|\()(?=[A-Z])', ' ', site_role).strip()
 
 def extract_users(users_response):
     users_list = []
@@ -119,25 +143,30 @@ def extract_users(users_response):
         logger.error(f"User extraction failed: {e}")
         exit(1)
 
-def clean_site_role(site_role):
-    if not site_role:
-        return ''
-    site_role = site_role.replace('CanPublish', ' (Can Publish)')
-    return re.sub(r'(?<!\s|\()(?=[A-Z])', ' ', site_role).strip()
-
 def save_to_csv(data, output_file):
     logger.debug(f"Saving {len(data)} users to '{output_file}'")
     try:
         if not data:
             raise ValueError("No data to save.")
 
-        seen_usernames = set()
+        seen_usernames = {}
         unique_data = []
 
         for row in data:
-            if row['Username'] not in seen_usernames:
-                unique_data.append(row)
-                seen_usernames.add(row['Username'])
+            username = row['Username']
+            if username not in seen_usernames:
+                seen_usernames[username] = row
+            else:
+                # Compare the roles, keep the highest priority role
+                existing_role = seen_usernames[username]['Site Role']
+                new_role = row['Site Role']
+                if get_role_priority(new_role) > get_role_priority(existing_role):
+                    seen_usernames[username]['Site Role'] = new_role
+                    seen_usernames[username]['License Level'] = determine_license_level(new_role)
+
+        # Write the final data to CSV
+        for user in seen_usernames.values():
+            unique_data.append(user)
 
         with open(output_file, mode='w', newline='', encoding='utf-8') as f:
             writer = csv.DictWriter(f, fieldnames=unique_data[0].keys())
