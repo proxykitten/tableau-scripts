@@ -133,6 +133,7 @@ def extract_users(users_response):
             user_data = {
                 'Display Name': user.get('fullName'),
                 'Username': user.get('name'),
+                'Email': user.get('email'),
                 'Site Role': cleaned_site_role,
                 'License Level': determine_license_level(cleaned_site_role),
                 'Last Login (UTC)': user.get('lastLogin'),

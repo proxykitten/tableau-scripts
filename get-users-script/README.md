@@ -3,6 +3,7 @@
 This script retrieves all users in the Tableau Server. It fetches the following data:
 - Display Name
 - Username
+- Email
 - Site Role
 - License Level
 - Last Login (UTC)
